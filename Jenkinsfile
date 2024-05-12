@@ -1,14 +1,7 @@
 pipeline {
-    agent { 
-        node {
-            label 'jetson'
-            }
-      }
 
-    tools {
-        python3 'python3'
-    }
-
+    agent  any 
+    
     triggers {
         pollSCM '* * * * *'
     }
