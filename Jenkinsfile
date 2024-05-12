@@ -1,17 +1,25 @@
 pipeline {
     agent { 
         node {
-            label 'docker-agent-python'
+            label 'jetson'
             }
       }
+
+    tools {
+        python3 'python3'
+    }
+
     triggers {
         pollSCM '* * * * *'
     }
+
     stages {
         stage('Build') {
             steps {
                 echo "Building.."
                 sh '''
+                python3 --version
+                pip3 install -U pytest
                 cd myapp
                 pip install -r requirements.txt
                 '''
