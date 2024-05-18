@@ -1,29 +1,26 @@
-#!groovy
 pipeline {
-    agent {
-        docker {
-            image 'python:3.7'
-        }
-    }
+    agent any
+
     triggers {
         pollSCM '* * * * *'
     }
-
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                echo "Building.."
                 sh '''
-                apt install python3 -y
-                python3 --version
                 cd myapp
-                pip install -r requirements.txt
+                python3 --version
+                pip3 --version
+                python3 -m venv ./env
+                ./env/bin/pip install pytest 
+                ./env/bin/pip install -r requirements.txt
                 '''
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo "Testing.."
                 sh '''
                 cd myapp
                 python3 hello.py

@@ -1,29 +1,34 @@
 #!groovy
+
 pipeline {
     agent {
         docker {
             image 'python:3.7'
         }
     }
-    triggers {
-        pollSCM '* * * * *'
-    }
 
     stages {
-        stage('Build') {
+        stage('Environment preparation') {
             steps {
-                echo 'Building..'
+                echo "-=- preparing project environment -=-"
+                // Python dependencies
                 sh '''
-                apt install python3 -y
-                python3 --version
                 cd myapp
+                python3 --version
                 pip install -r requirements.txt
                 '''
             }
         }
+        stage('Compile') {
+            steps {
+                echo "-=- compiling project -=-"
+                sh "python -m compileall ."
+            }
+        }
+
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo "Testing.."
                 sh '''
                 cd myapp
                 python3 hello.py
@@ -39,5 +44,5 @@ pipeline {
                 '''
             }
         }
-    }
+    }  
 }
