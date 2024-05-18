@@ -16,6 +16,7 @@ pipeline {
                 sh '''
                 apt install python3 -y
                 python3 --version
+                pip --version
                 cd myapp
                 pip install -r requirements.txt
                 '''
