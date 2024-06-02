@@ -11,6 +11,7 @@ docker build -t myjenkins-blueocean:2.414.2 .
 #IF you are having problems building the image yourself, you can pull from my registry (It is version 2.332.3-1 though, the original from the video)
 
 docker pull devopsjourney1/jenkins-blueocean:2.332.3-1 && docker tag devopsjourney1/jenkins-blueocean:2.332.3-1 myjenkins-blueocean:2.332.3-1
+
 ```
 
 ## Create the network 'jenkins'
@@ -19,6 +20,8 @@ docker network create jenkins
 ```
 
 ## Run the Container
+
+
 ### MacOS / Linux
 ```
 docker run --name jenkins-blueocean --restart=on-failure --detach \
@@ -38,6 +41,30 @@ docker run --name jenkins-blueocean --restart=on-failure --detach `
   --volume jenkins-data:/var/jenkins_home `
   --volume jenkins-docker-certs:/certs/client:ro `
   --publish 8080:8080 --publish 50000:50000 myjenkins-blueocean:2.414.2
+```
+
+
+## Alternatively, run official Jenkins BLueOcean Docker image with host docker daemon (no need to build image)
+### Linux
+```
+docker run --name my-jenkins-blueocean --restart=on-failure --detach \
+  --network jenkins --env DOCKER_HOST=unix:///var/run/docker.sock \
+  --publish 8080:8080 --publish 50000:50000 \
+  --volume jenkins-data:/var/jenkins_home \
+  --volume /var/run/docker.sock:/var/run/docker.sock \
+  --volume jenkins-docker-certs:/certs/client:ro 
+  myjenkins-blueocean:2.452.1-1
+```
+
+## Enter the shell of the container as root user
+```
+docker exec -it -u 0 my-jenkins-blueocean bin/bash
+```
+
+
+## Get the Docker CLI running the command in contaiiner shell
+```
+apt-get install -y docker.io
 ```
 
 
