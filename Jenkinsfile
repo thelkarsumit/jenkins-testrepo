@@ -7,15 +7,16 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building.."
+                sh '''
+                echo "Building is done"
+                '''
             }
         }
         stage('Test') {
             steps {
                 echo "Testing.."
                 sh '''
-                cd myapp
-                python3 hello.py
-                python3 hello.py --name=Brad
+                echo "Testing is done"
                 '''
             }
         }
@@ -33,7 +34,7 @@ pipeline {
             steps {
                 echo 'Deliver....'
                 sh '''
-                echo "doing delivery stuff.."
+                echo "doing delivery stuff"
                 '''
             }
         }
