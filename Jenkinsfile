@@ -20,16 +20,17 @@ pipeline {
                 '''
             }
         }
-        stage('sonarqube-analysis') {
-           steps {
-               withSonarQubeEnv('sonar-server') {
-                   sh 'mvn clean verify sonar:sonar \
-                   -Dsonar.projectKey=java \
-                   -Dsonar.host.url=http://35.228.202.17/:9000 \
-                   -Dsonar.login=squ_2b5035fd196f5084b47b217db9c3d0d09dcc31f8'
+        node {
+          stage('SCM') {
+            checkout scm
              }
-             }
-        }
+        stage('SonarQube Analysis') {
+            def mvn = tool 'Default Maven';
+                withSonarQubeEnv() {
+                      sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=01-Pipeline-GitRepo"
+                                  }
+                                }
+            }
         stage('Deliver') {
             steps {
                 echo 'Deliver....'
