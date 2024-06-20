@@ -1,9 +1,5 @@
 pipeline {
-    agent { 
-        node {
-            label 'docker-agent-python'
-            }
-      }
+    agent any
     triggers {
         pollSCM '* * * * *'
     }
@@ -26,6 +22,16 @@ pipeline {
                 python3 hello.py --name=Brad
                 '''
             }
+        }
+        stage('sonarqube-analysis') {
+           steps {
+               withSonarQubeEnv('sonar-server') {
+                   sh 'mvn clean verify sonar:sonar \
+                   -Dsonar.projectKey=java \
+                   -Dsonar.host.url=http://35.228.202.17/:9000 \
+                   -Dsonar.login=squ_2b5035fd196f5084b47b217db9c3d0d09dcc31f8'
+             }
+             }
         }
         stage('Deliver') {
             steps {
