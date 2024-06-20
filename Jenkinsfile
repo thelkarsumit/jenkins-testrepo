@@ -7,11 +7,6 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building.."
-                sh '''
-                python -v
-                // cd myapp
-                // pip install -r requirements.txt
-                '''
             }
         }
         stage('Test') {
